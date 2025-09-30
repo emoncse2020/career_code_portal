@@ -1,6 +1,28 @@
+import { use } from "react";
+import useInputField from "../../hooks/useInputField";
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { Link } from "react-router";
+
 const Register = () => {
+  const { createUser, setUser, setError } = use(AuthContext);
+  const [email, emailOnchange] = useInputField("");
+  const [password, setPassword] = useInputField("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createUser(email, password)
+      .then((res) => {
+        const currentUser = res.user;
+        console.log(currentUser);
+        setUser(currentUser);
+      })
+      .catch((error) => {
+        const message = error.message;
+        setError(message);
+      });
+  };
   return (
-    <div className="flex w-full  max-w-sm mx-auto overflow-hidden bg-white rounded shadow-lg dark:bg-gray-800 md:max-w-6xl my-8">
+    <div className="flex w-full  max-w-sm mx-auto overflow-hidden rounded shadow-lg  md:max-w-6xl my-8">
       {/* Left Image Section */}
       <div
         className="hidden bg-cover md:block lg:w-1/2"
@@ -16,14 +38,12 @@ const Register = () => {
         <div className="flex justify-center mx-auto"></div>
 
         {/* Welcome Text */}
-        <p className="mt-3 text-xl text-center text-gray-600 dark:text-gray-200">
-          Welcome!
-        </p>
+        <p className="mt-3 text-xl text-center ">Welcome!</p>
 
         {/* Google Sign In */}
         <a
           href="#"
-          className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+          className="flex items-center justify-center mt-4  transition-colors duration-300 transform border rounded-lg dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
           <div className="px-4 py-2">
             <svg className="w-6 h-6" viewBox="0 0 40 40">
@@ -45,7 +65,7 @@ const Register = () => {
               />
             </svg>
           </div>
-          <span className="w-5/6 px-4 py-3 font-bold text-center">
+          <span className="w-5/6 px-4  py-3 font-bold text-center">
             Sign Up with Google
           </span>
         </a>
@@ -55,7 +75,7 @@ const Register = () => {
           <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
           <a
             href="#"
-            className="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline"
+            className="text-xs text-center  uppercase  hover:underline"
           >
             or SignUp with email
           </a>
@@ -65,7 +85,7 @@ const Register = () => {
         {/* Email Input */}
         <div className="mt-4">
           <label
-            className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
+            className="block mb-2 text-sm font-medium "
             htmlFor="LoggingEmailAddress"
           >
             Email Address
@@ -77,6 +97,9 @@ const Register = () => {
               focus:border-blue-400 focus:ring-opacity-40 
               dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
             type="email"
+            name="email"
+            onChange={emailOnchange}
+            defaultValue={email}
           />
         </div>
 
@@ -84,7 +107,7 @@ const Register = () => {
         <div className="mt-4">
           <div className="flex justify-between">
             <label
-              className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
+              className="block mb-2 text-sm font-medium"
               htmlFor="loggingPassword"
             >
               Password
@@ -103,29 +126,33 @@ const Register = () => {
               focus:border-blue-400 focus:ring-opacity-40 
               dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
             type="password"
+            name="password"
+            defaultValue={password}
+            onChange={setPassword}
           />
         </div>
 
         {/* Sign In Button */}
         <div className="mt-6">
           <button
+            onClick={handleSubmit}
             className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize 
             transition-colors duration-300 transform bg-gray-800 rounded-lg 
             hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
           >
-            Sign In
+            Sign Up
           </button>
         </div>
 
         {/* Sign Up Link */}
         <div className="flex items-center justify-between mt-4">
           <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-          <a
-            href="#"
+          <Link
+            to={"/login"}
             className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
           >
             or sign in
-          </a>
+          </Link>
           <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
         </div>
       </div>
