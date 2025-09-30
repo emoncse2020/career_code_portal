@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import useInputField from "../../hooks/useInputField";
 import { use } from "react";
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import SocialLogin from "../Shared/SocialLogin";
 
 const Login = () => {
   const { signInUser, setUser, setLoading, setError } = use(AuthContext);
@@ -66,7 +67,7 @@ const Login = () => {
               <div className="flex justify-center mx-auto">
                 <h1>Welcome!!!</h1>
               </div>
-              <p className="mt-3 ">Sign in to access your account</p>
+              <SocialLogin text={"In"} />
             </div>
 
             {/* Form */}

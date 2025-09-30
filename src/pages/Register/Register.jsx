@@ -2,6 +2,7 @@ import { use } from "react";
 import useInputField from "../../hooks/useInputField";
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 import { Link } from "react-router";
+import SocialLogin from "../Shared/SocialLogin";
 
 const Register = () => {
   const { createUser, setUser, setError } = use(AuthContext);
@@ -41,7 +42,7 @@ const Register = () => {
         <p className="mt-3 text-xl text-center ">Welcome!</p>
 
         {/* Google Sign In */}
-        <a
+        {/* <a
           href="#"
           className="flex items-center justify-center mt-4  transition-colors duration-300 transform border rounded-lg dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
@@ -68,10 +69,10 @@ const Register = () => {
           <span className="w-5/6 px-4  py-3 font-bold text-center">
             Sign Up with Google
           </span>
-        </a>
-
+        </a> */}
+        <SocialLogin text={'Up'}/>
         {/* Divider */}
-        <div className="flex items-center justify-between mt-4">
+        {/* <div className="flex items-center justify-between mt-4">
           <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
           <a
             href="#"
@@ -80,7 +81,7 @@ const Register = () => {
             or SignUp with email
           </a>
           <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
-        </div>
+        </div> */}
 
         {/* Email Input */}
         <div className="mt-4">
