@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useInputField from "../../hooks/useInputField";
 import { use } from "react";
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
@@ -8,6 +8,9 @@ const Login = () => {
   const { signInUser, setUser, setLoading, setError } = use(AuthContext);
   const [email, emailOnChange] = useInputField("");
   const [password, passwordOnChange] = useInputField("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state || "/";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +26,7 @@ const Login = () => {
         const user = currentUser.user;
         setUser(user);
         setLoading(false);
+        navigate(from);
       })
       .catch((error) => {
         const message = error.message;
