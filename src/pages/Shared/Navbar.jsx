@@ -19,6 +19,7 @@ const Navbar = () => {
     { name: "Blog", path: "/blog" },
     ...(user
       ? [
+          { name: "My Applications", path: "/myApplications" },
           { name: user?.name || "Profile", path: "/profile" },
           { name: "Logout", path: "/logout" },
         ]

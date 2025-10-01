@@ -1,25 +1,44 @@
 import { useParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const JobApply = () => {
   const { id: jobId } = useParams();
   const { user } = useAuth();
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: "",
-    coverLetter: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Applying for job:", jobId, formData);
+    const form = e.target;
+    const formData = {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      coverLetter: form.coverLetter.value,
+    };
+    // console.log("Applying for job:", jobId, formData);
+    const application = {
+      jobId,
+      applicant: user.email,
+      formData,
+    };
+    axios
+      .post("http://localhost:3000/applications", application)
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your application has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     alert("Application submitted!");
   };
 
@@ -30,8 +49,7 @@ const JobApply = () => {
         <input
           type="text"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          defaultValue={user?.name || ""}
           placeholder="Full Name"
           className="w-full border px-3 py-2 rounded"
           required
@@ -39,8 +57,7 @@ const JobApply = () => {
         <input
           type="email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          defaultValue={user?.email || ""}
           placeholder="Email"
           className="w-full border px-3 py-2 rounded"
           required
@@ -48,16 +65,12 @@ const JobApply = () => {
         <input
           type="tel"
           name="phone"
-          value={formData.phone}
-          onChange={handleChange}
           placeholder="Phone"
           className="w-full border px-3 py-2 rounded"
           required
         />
         <textarea
           name="coverLetter"
-          value={formData.coverLetter}
-          onChange={handleChange}
           placeholder="Cover Letter"
           rows="4"
           className="w-full border px-3 py-2 rounded"
