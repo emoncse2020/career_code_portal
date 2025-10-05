@@ -1,7 +1,9 @@
 import { Briefcase, MapPin, DollarSign, Calendar } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router"; // ✅ correct import for Link in React Router v6+
 
 const JobCard = ({ job }) => {
+  if (!job) return null; // ✅ avoid render crashes if job is undefined
+
   return (
     <div className="w-full max-w-md bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col">
       {/* Header */}
@@ -32,38 +34,47 @@ const JobCard = ({ job }) => {
       </div>
 
       {/* Salary */}
-      <div className="flex items-center gap-2 text-gray-700 font-medium mb-3">
-        <DollarSign className="w-5 h-5 text-green-600" />
-        {job.salaryRange.min.toLocaleString()} -{" "}
-        {job.salaryRange.max.toLocaleString()}{" "}
-        {job.salaryRange.currency.toUpperCase()}
-      </div>
+      {job.salaryRange && (
+        <div className="flex items-center gap-2 text-gray-700 font-medium mb-3">
+          <DollarSign className="w-5 h-5 text-green-600" />
+          {job.salaryRange.min.toLocaleString()} -{" "}
+          {job.salaryRange.max.toLocaleString()}{" "}
+          {job.salaryRange.currency?.toUpperCase()}
+        </div>
+      )}
 
       {/* Description */}
       <p className="text-sm text-gray-600 mb-4 line-clamp-3">
         {job.description}
       </p>
 
+      {/* Requirements + Responsibilities */}
       <div className="border-t pt-3 flex-1">
-        {/* Requirements */}
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">
-          Requirements
-        </h3>
-        <ul className="list-disc list-inside text-sm text-gray-600 mb-3 space-y-1">
-          {job.requirements.slice(0, 3).map((req, i) => (
-            <li key={i}>{req}</li>
-          ))}
-        </ul>
+        {job?.requirements?.length > 0 && (
+          <>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              Requirements
+            </h3>
+            <ul className="list-disc list-inside text-sm text-gray-600 mb-3 space-y-1">
+              {job.requirements.slice(0, 3).map((req, i) => (
+                <li key={i}>{req}</li>
+              ))}
+            </ul>
+          </>
+        )}
 
-        {/* Responsibilities */}
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">
-          Responsibilities
-        </h3>
-        <ul className="list-disc list-inside text-sm text-gray-600 mb-3 space-y-1">
-          {job.responsibilities.slice(0, 3).map((res, i) => (
-            <li key={i}>{res}</li>
-          ))}
-        </ul>
+        {job?.responsibilities?.length > 0 && (
+          <>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              Responsibilities
+            </h3>
+            <ul className="list-disc list-inside text-sm text-gray-600 mb-3 space-y-1">
+              {job.responsibilities.slice(0, 3).map((res, i) => (
+                <li key={i}>{res}</li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
 
       {/* HR + Button */}
@@ -78,7 +89,7 @@ const JobCard = ({ job }) => {
           </a>
         </div>
 
-        {/* Apply Button */}
+        {/* Details Button */}
         <Link
           to={`/jobs/${job._id}`}
           className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium px-4 py-2 rounded-full shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
